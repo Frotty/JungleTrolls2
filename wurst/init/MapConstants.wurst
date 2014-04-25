@@ -1,0 +1,33 @@
+package MapConstants
+
+public enum Tribe
+	BLOODSPEAR
+	GOLDTOOTH
+	STONESKIN
+	
+public function Tribe.toString() returns string
+	switch this
+		case BLOODSPEAR
+			return "Bloodspear Tribe"
+		case GOLDTOOTH
+			return "Goldtooth Tribe"
+		case STONESKIN
+			return "Stoneskin Tribe"
+		default
+			return "No Tribe"
+			
+public function unit.getTribe() returns Tribe
+	let id = this.getOwner().getId()
+	if id < 4
+		return Tribe.BLOODSPEAR
+	else if id < 8
+		return Tribe.GOLDTOOTH
+	else
+		return Tribe.STONESKIN
+		
+
+
+
+
+		
+

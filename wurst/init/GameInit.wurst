@@ -1,0 +1,11 @@
+package GameInit
+import ClosureTimers
+import PlayerData
+import Entity
+
+init
+	// really cool closure init :)
+	doAfter(0.01, () -> begin
+		initPlayers()
+		startEntityLoop()
+	end)

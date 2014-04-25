@@ -1,0 +1,81 @@
+package Menu
+import initlater MenuUnit
+import Troll
+import HashMap
+import PlayerData
+
+constant BACK_SPELL_ID = '0000'
+
+public abstract class Action
+	abstract function run(Menu menu, Troll crafter, int spellId)
+
+public class Menu
+	Menu parent
+
+	private int array[12] spellIds
+	private int count = 0
+	private Menu array[12] subMenus
+	private MenuUnit array[12] menuUnit
+	private int openedSubMenu = 0
+	
+	static HashMap<int,Action> actionMap = new HashMap<int,Action>()
+	
+	function addSpellId(int id, Action action)
+		if count < 12
+			spellIds[count] = id
+			actionMap.put(id, action)
+			count++
+		else
+			error("A menu can only have 12 Spells")
+			
+	function addSubMenu(int index, Menu subMenu)
+		subMenus[index] = subMenu
+		subMenu.parent = this
+		
+	function openSubMenu(int index, Troll crafter)
+		subMenus[index].displayTo(crafter, true)
+		openedSubMenu = index
+		
+	function closeSubMenu(int pid)
+		subMenus[openedSubMenu].hide(pid)
+			
+	function hide(int pid)
+		menuUnit[pid].dummy.hide()
+		
+		
+	function displayTo(Troll t, boolean isSub)
+		let id = t.owner.getId()
+		if count > 11
+			error("Can't add Back Spell")
+		else if isSub
+			menuUnit[id].addSpell(BACK_SPELL_ID)
+			
+		if menuUnit[id] == null
+			menuUnit[id] = new MenuUnit(this, t)
+			for i = 0 to count-1
+				menuUnit[id].addSpell(spellIds[i])
+		else
+			menuUnit[id].dummy..setPos(t.pos.toVec2())..show()
+				
+		t.owner.selectSingle(menuUnit[id].dummy)
+		castTrigger.registerUnitEvent(menuUnit[id].dummy, EVENT_UNIT_SPELL_CAST)
+		
+	ondestroy
+		
+		
+trigger castTrigger = CreateTrigger()
+
+init
+	castTrigger.addAction(() -> begin
+		let u = GetTriggerUnit()
+		let data = u.getUserData() castTo MenuUnit
+		let id = GetSpellAbilityId()
+		let troll = u.getOwner().getPData().troll
+		Menu.actionMap.get(id).run(data.menu, troll, id)
+	end)
+	
+	Menu.actionMap.put(BACK_SPELL_ID, (Menu menu, Troll crafter, int spellId) -> begin
+		menu.parent.closeSubMenu(crafter.owner.getId())
+	end)
+	
+	

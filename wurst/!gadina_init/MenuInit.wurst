@@ -1,0 +1,13 @@
+package MenuInit
+import Menu
+import Troll
+
+// Create Menus here!!
+public function init_Menus()
+	let mainMenu = new Menu()
+	let survivalMenu = new Menu()
+	mainMenu.addSubMenu(0, survivalMenu)
+	mainMenu.addSpellId('0000', (Menu menu, Troll crafter, int spellId) -> begin
+		menu.openSubMenu(0, crafter)
+	end)
+	

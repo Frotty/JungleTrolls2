@@ -1,0 +1,40 @@
+package PlayerData
+import Colors
+import LinkedList
+import Troll
+
+public LinkedList<PlayerData> red_players = new LinkedList<PlayerData>()
+public LinkedList<PlayerData> green_players = new LinkedList<PlayerData>()
+public LinkedList<PlayerData> allPlayers = new LinkedList<PlayerData>()
+
+public function player.getPData() returns PlayerData
+	return pData[this.getId()]
+	
+
+PlayerData array pData
+
+public class PlayerData
+	player 	p
+	int 	id
+	string 	name
+	string 	stylizedName
+	int income = 0
+	Troll troll
+	
+	construct(player p)
+		this.p = p
+		id = p.getId()
+		name = p.getName()
+		stylizedName = p.getNameColored()
+		pData[id] = this
+		if id < 6
+			red_players.add(this)
+		else
+			green_players.add(this)
+		allPlayers.add(this)
+		p.setState(PLAYER_STATE_GIVES_BOUNTY, 1)
+			
+public function initPlayers()
+	for p in bj_FORCE_ALL_PLAYERS
+		if p.getSlotState() == PLAYER_SLOT_STATE_PLAYING
+			new PlayerData(p)
