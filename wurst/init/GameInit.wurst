@@ -2,10 +2,12 @@ package GameInit
 import ClosureTimers
 import PlayerData
 import Entity
+import MenuInit
 
 init
 	// really cool closure init :)
 	doAfter(0.01, () -> begin
 		initPlayers()
+		init_Menus()
 		startEntityLoop()
 	end)

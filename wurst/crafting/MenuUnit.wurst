@@ -2,8 +2,8 @@ package MenuUnit
 import Troll
 import Menu
 import DummyRecycler
-
-constant DUMMY_ID = '0000'
+import Basics
+import ClosureTimers
 
 public class MenuUnit
 	Menu menu
@@ -11,13 +11,16 @@ public class MenuUnit
 	int count = 0
 	
 	construct(Menu menu, Troll crafter)
-		dummy = createUnit(crafter.owner, DUMMY_ID, crafter.pos, angle(0))
-		dummy..setOwner(crafter.owner, false)
-			..removeAbility('Amov')
+		dummy = createUnit(crafter.owner, 'e000', crafter.pos.toVec2(), angle(0))
+		print("dummy created")
+		print("dummy hp: " + dummy.getHP().toString())
+		dummy..removeAbility('Amov')
 			..removeAbility('Aatk')
 			..setUserData(this castTo int)
 		this.menu = menu
-		trig.registerUnitEvent(dummy, EVENT_UNIT_DESELECTED)
+		crafter.owner.selectSingle(dummy)
+		print("dummy selected")
+		doAfter(1.,() ->trig.registerUnitEvent(dummy, EVENT_UNIT_DESELECTED))
 		
 	function addSpell(int id)
 		if count < 12
@@ -27,11 +30,12 @@ public class MenuUnit
 			error("MenuUnit can't have more than 12 spells")
 			
 			
-	ondestroy
-		dummy.remove()
+	function hide()
+		print("hidden")
+		dummy..setPos(0,0)..hide()
 			
 	
 constant trig = CreateTrigger()	
 
 init
-	trig.addAction(() -> destroy (GetTriggerUnit().getUserData() castTo MenuUnit))
+	trig.addAction(() -> (GetTriggerUnit().getUserData() castTo MenuUnit).hide())

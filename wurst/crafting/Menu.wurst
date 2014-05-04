@@ -4,7 +4,7 @@ import Troll
 import HashMap
 import PlayerData
 
-constant BACK_SPELL_ID = '0000'
+constant BACK_SPELL_ID = 'A003'
 
 public abstract class Action
 	abstract function run(Menu menu, Troll crafter, int spellId)
@@ -45,17 +45,19 @@ public class Menu
 		
 	function displayTo(Troll t, boolean isSub)
 		let id = t.owner.getId()
-		if count > 11
-			error("Can't add Back Spell")
-		else if isSub
-			menuUnit[id].addSpell(BACK_SPELL_ID)
-			
+		
 		if menuUnit[id] == null
 			menuUnit[id] = new MenuUnit(this, t)
 			for i = 0 to count-1
 				menuUnit[id].addSpell(spellIds[i])
 		else
 			menuUnit[id].dummy..setPos(t.pos.toVec2())..show()
+			
+		if count > 11
+			error("Can't add Back Spell")
+		else if isSub
+			print("added back")
+			menuUnit[id].addSpell(BACK_SPELL_ID)
 				
 		t.owner.selectSingle(menuUnit[id].dummy)
 		castTrigger.registerUnitEvent(menuUnit[id].dummy, EVENT_UNIT_SPELL_CAST)

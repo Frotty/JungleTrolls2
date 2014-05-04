@@ -1,14 +1,32 @@
 package Troll
 import public Entity
+import initlater MenuInit
 
-constant TROLL_ID = '0000'
+constant TROLL_ID = 'Hblm'
+
+constant CRAFT_MENU_ID = 'A000'
 
 public class Troll extends UnitEntity
 	real heat
 	real food
 	
-	construct(vec3 pos)
+	construct(vec3 pos, player owner)
 		super(createUnit(owner, TROLL_ID, vec2(pos.x, pos.y), angle(0)))
+		castTrig.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
 
 	override function update()
 		super.update()
+		
+	function onCast(int id)
+		switch id
+			case CRAFT_MENU_ID
+				mainMenu.displayTo(this, false)
+
+trigger castTrig = CreateTrigger()
+	
+init
+	castTrig.addAction(() -> begin
+		let caster = GetSpellAbilityUnit()
+		let troll = caster.getEntity() castTo Troll
+		troll.onCast(GetSpellAbilityId())
+	end)

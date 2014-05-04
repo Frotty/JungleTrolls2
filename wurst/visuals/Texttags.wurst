@@ -1,0 +1,93 @@
+package Texttags
+import Texttag
+import TimedLoop
+
+constant UNIT_Z_OFFSET = 75.
+constant MERGE_MAX_DISTANCE_SQ = 32*32 
+constant MERGE_ADD_DUR = 1.5
+
+public enum TextType
+	DAMAGE
+	HEAL
+	DOT
+	MISS
+	DODGE
+	GOLD
+	
+color array ttcolors
+init
+	ttcolors[TextType.DAMAGE castTo int] = color(255,66,49)
+	ttcolors[TextType.HEAL castTo int] = color(140,206,66)
+	ttcolors[TextType.DOT castTo int] = color(115,58,8)
+	ttcolors[TextType.MISS castTo int] = color(255,0,0)
+	ttcolors[TextType.DODGE castTo int] = color(123,49,165)
+	ttcolors[TextType.GOLD castTo int] = color(255,220,0)
+
+
+Texttag array damageTxts
+Texttag array healTxts
+Texttag array dotTxts
+Texttag array missTxts
+Texttag array dodgeTxts
+Texttag array goldTxts
+
+public class Texttag
+	use TimedLoop
+
+	vec3 startPos
+	vec3 pos
+	vec3 velocity
+	texttag tt
+	TextType ttype = TextType.DAMAGE
+	real value
+	
+	int index = 0
+	real duration = -1
+	
+	construct(vec3 pos, TextType ttype)
+		tt = CreateTextTag()
+		this.ttype = ttype
+		startPos = pos
+		this.pos = pos
+	
+	construct(unit attach, TextType ttype, real value)
+		index = attach.getUserData()
+		boolean create = true
+		if damageTxts[index] != null
+			let oldTexttag = damageTxts[index]
+			if attach.getPos3fake().distToVecSquared(oldTexttag.startPos) < MERGE_MAX_DISTANCE_SQ
+				oldTexttag.merge(value)
+				destroy this
+				create = false
+		if create
+			damageTxts[index] = this
+			tt = CreateTextTag()
+			this.ttype = ttype
+			startPos = attach.getPos().withZ(UNIT_Z_OFFSET)
+			this.pos = startPos
+		
+	function merge(real value)
+		this.value += value
+		duration += MERGE_ADD_DUR
+		setValue(this.value)
+		
+	function setValue(real val)
+		tt.setText(val.toString(), getSizeForVal(val))
+		
+	
+	override function onTimedLoop()
+		pos += velocity
+		tt.setPos(pos)
+		if duration > 0
+			duration--
+		else
+			stopTimedLoopAndDestroy()
+			
+	ondestroy
+		tt.destr()
+		damageTxts[index] = null
+		
+			
+	static function getSizeForVal(real val)
+		
+		

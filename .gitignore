@@ -183,3 +183,7 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+*.w3a
+*.w3o
+*.w3u
+*.j

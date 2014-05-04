@@ -1,0 +1,26 @@
+package CraftingConfig
+import Menu
+import Troll
+import Button
+
+
+public Menu mainMenu
+
+public function getButtons() returns LinkedList<Button>
+	let buttonList = new LinkedList<Button>()
+	buttonList.add(new Button())
+
+// Create Menus here!!
+public function init_Menus()
+	mainMenu = new Menu()
+	let survivalMenu = new Menu()
+	survivalMenu.addSpellId('A002', (Menu menu, Troll crafter, int spellId) -> begin
+		print("SPELL CAST")
+	end)
+	mainMenu.addSubMenu(0, survivalMenu)
+	mainMenu.addSpellId('A001', (Menu menu, Troll crafter, int spellId) -> begin
+		print("on cast")
+		menu.openSubMenu(0, crafter)
+	end)
+	
+	new Troll(vec3(0,0,0), Player(0))
