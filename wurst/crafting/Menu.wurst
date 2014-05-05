@@ -3,6 +3,7 @@ import initlater MenuUnit
 import Troll
 import HashMap
 import PlayerData
+import Button
 
 constant BACK_SPELL_ID = 'A003'
 
@@ -11,14 +12,20 @@ public abstract class Action
 
 public class Menu
 	Menu parent
-
-	private int array[12] spellIds
+	// Array to store the buttons
+	private Button array[12] buttons
+	// Number of Buttons (for iterating)
 	private int count = 0
+	// 12 possible submenus
 	private Menu array[12] subMenus
+	// 1 MenuUnit for each player
 	private MenuUnit array[12] menuUnit
 	private int openedSubMenu = 0
 	
 	static HashMap<int,Action> actionMap = new HashMap<int,Action>()
+	
+	function addButton(int xPosition, int yPosition, Button newButton)
+		buttons[count] = new Button(x,y,
 	
 	function addSpellId(int id, Action action)
 		if count < 12

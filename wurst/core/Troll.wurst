@@ -1,6 +1,6 @@
 package Troll
 import public Entity
-import initlater MenuInit
+import initlater CraftingConfig
 
 constant TROLL_ID = 'Hblm'
 

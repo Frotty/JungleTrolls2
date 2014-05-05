@@ -4,15 +4,12 @@ import Troll
 import Button
 
 
-public Menu mainMenu
-
-public function getButtons() returns LinkedList<Button>
-	let buttonList = new LinkedList<Button>()
-	buttonList.add(new Button())
 
 // Create Menus here!!
-public function init_Menus()
-	mainMenu = new Menu()
+public function init_Menus() returns LinkedList<Menu>
+	let menuList = new LinkedList<Menu>
+	let mainMenu = new Menu()
+	menuList.add(mainMenu)
 	let survivalMenu = new Menu()
 	survivalMenu.addSpellId('A002', (Menu menu, Troll crafter, int spellId) -> begin
 		print("SPELL CAST")
@@ -24,3 +21,14 @@ public function init_Menus()
 	end)
 	
 	new Troll(vec3(0,0,0), Player(0))
+	return menuList
+	
+
+init
+	let menus = init_Menus()
+	
+@compiletime function createButtons()
+	let menus = init_Menus()
+	
+	for m in menus
+		for b in m.buttons

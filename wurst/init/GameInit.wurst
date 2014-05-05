@@ -2,7 +2,7 @@ package GameInit
 import ClosureTimers
 import PlayerData
 import Entity
-import MenuInit
+import CraftingConfig
 
 init
 	// really cool closure init :)
