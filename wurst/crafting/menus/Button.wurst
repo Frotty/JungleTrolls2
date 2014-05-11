@@ -1,0 +1,23 @@
+package Button
+import ButtonSpellDef
+
+public class Button
+	int x
+	int y
+	int id
+	string name
+	string orderString
+	string tooltip
+	
+	construct(int xpos, int ypos, string name, string tooltip)
+		x = xpos
+		y = ypos
+		this.name = name
+		this.tooltip = tooltip
+		
+	function setId(int id)
+		this.id = id
+	
+	function generateButtonSpell()
+		new ButtonSpellDef(id, x, y, name, tooltip)
+

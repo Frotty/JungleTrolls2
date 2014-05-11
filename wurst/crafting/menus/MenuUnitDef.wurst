@@ -1,0 +1,14 @@
+package MenuUnitDef
+import UnitObjEditing
+
+constant BASE_ID = '0000'
+
+public class MenuUnitDef extends UnitOrBuildingOrHeroDefinition
+	
+	construct(int id, string name)
+		super(id, BASE_ID)
+		setHitPointsMaximumBase(999999)
+		setModelFile("")
+		setName(name)
+		setMovementType(MovementType.None)
+		setAttacksEnabled(0)

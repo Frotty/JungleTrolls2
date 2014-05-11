@@ -3,8 +3,9 @@ import Colors
 import LinkedList
 import Troll
 
-public LinkedList<PlayerData> red_players = new LinkedList<PlayerData>()
-public LinkedList<PlayerData> green_players = new LinkedList<PlayerData>()
+public LinkedList<PlayerData> bloodspearPlayers = new LinkedList<PlayerData>()
+public LinkedList<PlayerData> goldtoothPlayers = new LinkedList<PlayerData>()
+public LinkedList<PlayerData> stoneskinPlayers = new LinkedList<PlayerData>()
 public LinkedList<PlayerData> allPlayers = new LinkedList<PlayerData>()
 
 public function player.getPData() returns PlayerData
@@ -18,7 +19,6 @@ public class PlayerData
 	int 	id
 	string 	name
 	string 	stylizedName
-	int income = 0
 	Troll troll
 	
 	construct(player p)
@@ -27,10 +27,12 @@ public class PlayerData
 		name = p.getName()
 		stylizedName = p.getNameColored()
 		pData[id] = this
-		if id < 6
-			red_players.add(this)
+		if id < 4
+			bloodspearPlayers.add(this)
+		else if id < 8
+			goldtoothPlayers.add(this)
 		else
-			green_players.add(this)
+			stoneskinPlayers.add(this)
 		allPlayers.add(this)
 		p.setState(PLAYER_STATE_GIVES_BOUNTY, 1)
 			

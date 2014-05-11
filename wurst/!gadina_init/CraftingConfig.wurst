@@ -3,32 +3,27 @@ import Menu
 import Troll
 import Button
 
-
+public Menu mainMenu
 
 // Create Menus here!!
 public function init_Menus() returns LinkedList<Menu>
 	let menuList = new LinkedList<Menu>
-	let mainMenu = new Menu()
+	mainMenu = new Menu("Main Menu", false)
 	menuList.add(mainMenu)
-	let survivalMenu = new Menu()
-	survivalMenu.addSpellId('A002', (Menu menu, Troll crafter, int spellId) -> begin
-		print("SPELL CAST")
-	end)
+	mainMenu.addButton(new Button(0,0,"Open Sub Menu", "Do eet"),
+							(Menu menu, Troll crafter, int spellId) -> menu.openSubMenu(0, crafter))
+	let survivalMenu = new Menu("Survival", true)
+	survivalMenu.addButton(new Button(2,1,"Cool Crafting Stuff", "That is generated automatically"), 
+							(Menu menu, Troll crafter, int spellId) -> print("you crafted shit"))
 	mainMenu.addSubMenu(0, survivalMenu)
-	mainMenu.addSpellId('A001', (Menu menu, Troll crafter, int spellId) -> begin
-		print("on cast")
-		menu.openSubMenu(0, crafter)
-	end)
-	
-	new Troll(vec3(0,0,0), Player(0))
 	return menuList
-	
 
-init
-	let menus = init_Menus()
 	
 @compiletime function createButtons()
 	let menus = init_Menus()
 	
 	for m in menus
-		for b in m.buttons
+		for i = 0 to m.buttonCount
+			m.buttons[i].generateButtonSpell()
+			
+		

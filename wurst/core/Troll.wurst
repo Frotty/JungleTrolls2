@@ -20,7 +20,7 @@ public class Troll extends UnitEntity
 	function onCast(int id)
 		switch id
 			case CRAFT_MENU_ID
-				mainMenu.displayTo(this, false)
+				mainMenu.displayTo(this)
 
 trigger castTrig = CreateTrigger()
 	

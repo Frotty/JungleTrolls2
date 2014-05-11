@@ -1,0 +1,113 @@
+package Menu
+import MenuUnitDef
+import Troll
+import MapBounds
+import PlayerData
+import Button
+
+constant BUTTON_START_ID = 'A000'
+constant UNIT_START_ID = 'U000'
+
+public abstract class Action
+	abstract function run(Menu menu, Troll crafter, int spellId)
+
+public class Menu
+	// Public Members
+	// If the Menu is a submen it has  parent
+	Menu parent
+	// Number of Buttons (for iterating)
+	int buttonCount = 0
+	// Array to store the buttons
+	Button array[12] buttons
+	// Name
+	string name
+	
+	// Private Members
+	// 12 possible submenus
+	private Menu array[12] subMenus
+	// Actions
+	private Action array[12] actions
+	// 1 MenuUnit for each player
+	private unit array[12] menuUnits
+	private int openedSubMenu = 0
+	private boolean isSubMenu = false
+		
+	construct(string name, boolean isSub)
+		this.name = name
+		isSubMenu = isSub
+		if isSub
+			addButton(backButton, (Menu menu, Troll crafter, int spellId) -> menu.close())
+	
+	function addButton(Button newButton, Action action)
+		buttonCount++
+		if buttonCount > 11
+			error("Menu can only havea maximum of 12 Buttons")
+		newButton.setId(generateButtonId())
+		buttons[buttonCount-1] = newButton
+		
+	function getAction(int spellId) returns Action
+		let index = spellId - BUTTON_START_ID - (this castTo int) * 12
+		return actions[index]
+				
+	function addSubMenu(int index, Menu subMenu)
+		subMenus[index] = subMenu
+		subMenu.parent = this
+		
+	function openSubMenu(int index, Troll crafter)
+		subMenus[index].displayTo(crafter)
+		openedSubMenu = index
+		
+	function close()
+		if isSubMenu
+			
+		else
+			error("Cannot close menu that is no submenu")
+		
+	function closeSubMenu(int pid)
+		subMenus[openedSubMenu].hide(pid)
+			
+	function hide(int pid)
+		menuUnits[pid]..setPos(mapMaxX, mapMaxY)..hide()
+		
+		
+	function displayTo(Troll t)
+		let id = t.owner.getId()
+		
+		if menuUnits[id] == null
+			menuUnits[id] = createUnit(t.owner, UNIT_START_ID + (this castTo int), t.pos.toVec2(), angle(0))
+								..setUserData(this castTo int)
+			for i = 0 to buttonCount-1
+				menuUnits[id].addAbility(getButtonStartId()+1+i)
+		else
+			menuUnits[id]..setPos(t.pos.toVec2())..show()
+				
+		t.owner.selectSingle(menuUnits[id])
+		castTrigger.registerUnitEvent(menuUnits[id], EVENT_UNIT_SPELL_CAST)
+		
+	function generateMenuUnit()
+		let mudef = new MenuUnitDef(UNIT_START_ID + (this castTo int), name)
+		
+	private function getButtonStartId() returns int
+		return BUTTON_START_ID + (this castTo int)-1
+		
+	private function generateButtonId() returns int
+		return getButtonStartId() + buttonCount
+		
+	ondestroy
+
+		
+
+				
+trigger castTrigger = CreateTrigger()
+
+init
+	castTrigger.addAction(() -> begin
+		let u = GetTriggerUnit()
+		let menu = u.getUserData() castTo Menu
+		let id = GetSpellAbilityId()
+		let troll = u.getOwner().getPData().troll
+		menu.getAction(id).run(menu, troll, id)
+	end)
+	
+Button backButton = new Button(0, 3, "Back", "Return to previous menu")
+	

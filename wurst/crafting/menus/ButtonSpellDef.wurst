@@ -1,0 +1,16 @@
+package ButtonSpellDef
+import ChannelSpellPreset
+
+public class ButtonSpellDef extends ChannelSpellPreset
+
+	construct(int id, int xpos, int ypos, string name, string tooltip)
+		super(id, 1)
+		removeChannelProperties()
+		setButtonPositionNormalX(xpos)
+		setButtonPositionNormalY(ypos)
+		setName(name)
+		setTooltipNormal(1, tooltip)
+		setOption(Option.VISIBLE, true)
+		setManaCost(1, 0)
+		setCooldown(1, 0)
+

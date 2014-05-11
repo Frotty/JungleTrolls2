@@ -88,6 +88,7 @@ public class Texttag
 		damageTxts[index] = null
 		
 			
-	static function getSizeForVal(real val)
+	static function getSizeForVal(real val) returns real
+		return 2
 		
 		
