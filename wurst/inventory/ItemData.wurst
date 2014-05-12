@@ -1,0 +1,13 @@
+package ItemData
+
+public tuple itemSlotPosition(int page, int slot)
+
+public class ItemData
+	vec2 pos
+	unit carrier
+	player owner
+	itemSlotPosition slotPos
+	
+	construct(string name)
+
+	

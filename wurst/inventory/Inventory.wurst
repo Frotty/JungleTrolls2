@@ -1,0 +1,14 @@
+package Inventory
+import initlater Troll
+import initlater ItemData
+
+public class Inventory
+	int pages
+	ItemData array[6] items
+	
+	construct(int pages, Troll troll)
+		this.pages = pages
+		
+	
+	
+
