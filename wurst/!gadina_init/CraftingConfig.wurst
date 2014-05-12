@@ -1,5 +1,5 @@
 package CraftingConfig
-import Menu
+import public Menu
 import Troll
 import Button
 

@@ -3,6 +3,7 @@ import ClosureTimers
 import PlayerData
 import Entity
 import CraftingConfig
+import Troll
 
 init
 	// really cool closure init :)
@@ -10,4 +11,5 @@ init
 		initPlayers()
 		init_Menus()
 		startEntityLoop()
+		new Troll(vec3(0,0,0), Player(0))
 	end)

@@ -12,6 +12,7 @@ public class Troll extends UnitEntity
 	
 	construct(vec3 pos, player owner)
 		super(createUnit(owner, TROLL_ID, vec2(pos.x, pos.y), angle(0)))
+		actor.addAbility(CRAFT_MENU_ID)
 		castTrig.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
 
 	override function update()
